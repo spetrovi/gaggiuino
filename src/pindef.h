@@ -2,6 +2,7 @@
 #define PINDEF_H
 
 // STM32F4 pins definitions
+#define thermoDI      PB3
 #define thermoDO      PB4
 #define thermoCS      PA6
 #define thermoCLK     PA5

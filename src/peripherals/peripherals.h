@@ -6,12 +6,6 @@
 #include <Arduino.h>
 
 static inline void pinInit(void) {
-  #if defined(LEGO_VALVE_RELAY)
-    pinMode(valvePin, OUTPUT_OPEN_DRAIN);
-  #else
-    pinMode(valvePin, OUTPUT);
-  #endif
-  pinMode(relayPin, OUTPUT);
   pinMode(brewPin,  INPUT_PULLUP);
   pinMode(steamPin, INPUT_PULLUP);
   pinMode(HX711_dout_1, INPUT_PULLUP);
@@ -39,20 +33,6 @@ static inline bool steamState(void) {
   return digitalRead(steamPin) == LOW; // pin will be low when switch is ON.
 }
 
-static inline void openValve(void) {
-  #if defined LEGO_VALVE_RELAY
-    digitalWrite(valvePin, LOW);
-  #else
-    digitalWrite(valvePin, HIGH);
-  #endif
-}
 
-static inline void closeValve(void) {
-  #if defined LEGO_VALVE_RELAY
-    digitalWrite(valvePin, HIGH);
-  #else
-    digitalWrite(valvePin, LOW);
-  #endif
-}
 
 #endif

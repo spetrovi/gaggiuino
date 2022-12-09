@@ -37,10 +37,6 @@ void setup(void) {
   setPumpOff();
   LOG_INFO("Pump turned off");
 
-  // Valve
-  closeValve();
-  LOG_INFO("Valve closed");
-
   lcdInit();
   LOG_INFO("LCD Init");
 
@@ -488,23 +484,19 @@ static void profiling(void) {
     preinfusionFinished = currentPhase.getIndex() >= preInfusionFinishedPhaseIdx;
 
     if (phaseProfiler.isFinished()) {
-      closeValve();
       setPumpOff();
       brewActive = false;
     } else if (currentPhase.getType() == PHASE_TYPE_PRESSURE) {
       float newBarValue = currentPhase.getTarget();
       float flowRestriction =  currentPhase.getRestriction();
-      openValve();
       setPumpPressure(newBarValue, flowRestriction, currentState);
     } else {
       float newFlowValue = currentPhase.getTarget();
       float pressureRestriction =  currentPhase.getRestriction();
-      openValve();
       setPumpFlow(newFlowValue, pressureRestriction, currentState);
     }
   } else {
     setPumpOff();
-    closeValve();
   }
   // Keep that water at temp
   justDoCoffee(runningCfg, currentState, brewActive, preinfusionFinished);
@@ -512,12 +504,10 @@ static void profiling(void) {
 
 static void manualFlowControl(void) {
   if (brewActive) {
-    openValve();
     float flow_reading = lcdGetManualFlowVol() / 10 ;
     setPumpFlow(flow_reading, 0.f, currentState);
     justDoCoffee(runningCfg, currentState, brewActive, preinfusionFinished);
   } else {
-    closeValve();
     setPumpOff();
   }
 }
@@ -565,16 +555,10 @@ static void brewParamsReset(void) {
 
 
 static void flushActivated(void) {
-  #if defined SINGLE_BOARD || defined LEGO_VALVE_RELAY
-      openValve();
-  #endif
   setPumpFullOn();
 }
 
 static void flushDeactivated(void) {
-  #if defined SINGLE_BOARD || defined LEGO_VALVE_RELAY
-      closeValve();
-  #endif
   setPumpOff();
 }
 
@@ -586,10 +570,8 @@ static void fillBoiler(float targetBoilerFullPressure) {
 
     if (currentState.pressure < targetBoilerFullPressure && timePassed <= BOILER_FILL_TIMEOUT) {
       lcdShowPopup("Filling boiler!");
-      openValve();
       setPumpToRawValue(80);
     } else if (!startupInitFinished) {
-      closeValve();
       setPumpToRawValue(0);
       startupInitFinished = true;
     }
@@ -608,10 +590,8 @@ static void systemHealthCheck(float pressureThreshold) {
         lcdShowPopup("Releasing pressure!");
         setPumpOff();
         setBoilerOff();
-        openValve();
         sensorsRead();
       }
-      closeValve();
       systemHealthTimer = millis() + HEALTHCHECK_EVERY;
     }
   }

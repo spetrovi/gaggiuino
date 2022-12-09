@@ -9,10 +9,10 @@
 
 #define zcPin         PA0
 #define brewPin       PC14
-//#define relayPin      PA15
+#define relayPin      PA15
 #define dimmerPin     PA1
 #define steamPin      PC15
-#define valvePin      PC13
+//#define valvePin      PC13
 
 #define HX711_sck_1   PB0
 #define HX711_sck_2   PB1

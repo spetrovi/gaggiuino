@@ -5,7 +5,7 @@
 
 #if defined SINGLE_BOARD
   #include <Adafruit_MAX31865.h>
-  Adafruit_MAX31865 thermocouple = Adafruit_MAX31865(thermoCS, thermoDI, thermoDO, thermoCLK);
+  Adafruit_MAX31865 thermocouple = Adafruit_MAX31865(thermoCS);
 #endif
 
 static inline void thermocoupleInit(void) {
